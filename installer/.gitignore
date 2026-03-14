@@ -1,3 +1,11 @@
-build/bin
-node_modules
-frontend/dist
+# Wails / Go
+build/bin/
+build/
+bin/
+node_modules/
+frontend/dist/
+frontend/node_modules/
+*.exe
+*.o
+*.a
+.wails/

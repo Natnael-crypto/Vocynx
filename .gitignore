@@ -1,24 +1,45 @@
 # Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 .venv/
+venv/
+env/
+.env
+.pytest_cache/
+.coverage
+htmlcov/
 
 # Node
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Models
 models/
 *.bin
 *.pt
-*.exe
+*.onnx
 
-# Build
+# Build and Packaging
 dist/
 build/
+*.exe
+*.pkg
+*.spec
+vocyn.egg-info/
+.installed.cfg
+manifest
 installer/build/
 installer/frontend/dist/
 installer/frontend/node_modules/
+installer/bin/
 
 # OS
 .DS_Store
 Thumbs.db
+.idea/
+.vscode/
+*.swp
