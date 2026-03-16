@@ -216,9 +216,33 @@ class MainWindow(QMainWindow):
         history_layout = QVBoxLayout(self.card_history)
         history_layout.setContentsMargins(20, 20, 20, 20)
         
+        header_history_layout = QHBoxLayout()
+        header_history_layout.setContentsMargins(0, 0, 0, 0)
+        
         lbl_history_title = QLabel("RECENT TRANSCRIPTIONS")
         lbl_history_title.setStyleSheet("color: #606060; font-size: 10px; font-weight: bold;")
-        history_layout.addWidget(lbl_history_title)
+        
+        self.btn_clear_history = QPushButton("Clear")
+        self.btn_clear_history.setStyleSheet("""
+            QPushButton {
+                background-color: transparent;
+                color: #808080;
+                font-size: 11px;
+                padding: 2px 8px;
+            }
+            QPushButton:hover {
+                color: #E0E0E0;
+                background-color: #2C2C2C;
+            }
+        """)
+        self.btn_clear_history.setCursor(QCursor(Qt.PointingHandCursor))
+        self.btn_clear_history.clicked.connect(self.clear_transcriptions)
+        
+        header_history_layout.addWidget(lbl_history_title)
+        header_history_layout.addStretch()
+        header_history_layout.addWidget(self.btn_clear_history)
+        
+        history_layout.addLayout(header_history_layout)
         history_layout.addSpacing(10)
         
         self.history_list_layout = QVBoxLayout()
@@ -357,3 +381,8 @@ class MainWindow(QMainWindow):
         
         # Show a "Copied!" tooltip at the cursor position
         QToolTip.showText(QCursor.pos(), "Copied to clipboard!", msecShowTime=1500)
+
+    def clear_transcriptions(self):
+        """Clears all recent transcriptions."""
+        self.recent_transcriptions = []
+        self.refresh_history_ui()

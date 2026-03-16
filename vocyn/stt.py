@@ -26,7 +26,7 @@ def is_speech(audio):
     return energy > ENERGY_THRESHOLD
 
 class TranscriptionWorker:
-    def __init__(self, model_loaded_callback=None, transcription_result_callback=None):
+    def __init__(self, model_loaded_callback=None, transcription_result_callback=None, audio_level_callback=None):
         self.model = None
         self.audio_queue = queue.Queue()
         self.is_recording = False
@@ -34,6 +34,7 @@ class TranscriptionWorker:
         self.audio_stream = None
         self.model_loaded_callback = model_loaded_callback
         self.transcription_result_callback = transcription_result_callback
+        self.audio_level_callback = audio_level_callback
         self.current_buffer = []
         self.speech_active = False
         self.last_speech_time = None
@@ -47,10 +48,13 @@ class TranscriptionWorker:
             # We use float32 for CPU since int8 can sometimes have issues on certain CPUs 
             # or require specific libraries. CPU usage limit is handled separately if needed.
             from faster_whisper import WhisperModel
+            import os
+            cpu_threads = max(1, os.cpu_count() // 2)
             self.model = WhisperModel(
                 model_name,
                 device="cpu",
                 compute_type="int8",
+                cpu_threads=cpu_threads,
                 download_root=models_path
             )
             # print("Model loaded successfully.")
@@ -66,10 +70,18 @@ class TranscriptionWorker:
     def _audio_callback(self, indata, frames, time_info, status):
         """Callback for SoundDevice to feed audio data into the queue."""
         if status:
-            # print(f"Audio stream status: {status}")
             pass
         
         if self.is_recording:
+            # Emit dynamic audio level for UI (0.0 to 1.0)
+            if self.audio_level_callback:
+                # calculate energy and normalize roughly for speech values
+                energy = calculate_energy(indata)
+                # cap max energy at 0.15 for normalization
+                max_expected_energy = 0.15  
+                level = min(1.0, energy / max_expected_energy)
+                self.audio_level_callback(level)
+                
             self.audio_queue.put(indata.copy())
 
     def start_recording(self):
@@ -153,9 +165,13 @@ class TranscriptionWorker:
         try:
             segments, info = self.model.transcribe(
                 audio,
-                beam_size=5,
+                beam_size=1,
+                best_of=1,
                 task=task,
-                language=whisper_lang
+                language=whisper_lang,
+                vad_filter=True,
+                vad_parameters=dict(min_silence_duration_ms=300),
+                condition_on_previous_text=False,
             )
             
             text = " ".join(segment.text for segment in segments).strip()
