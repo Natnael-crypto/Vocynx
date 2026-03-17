@@ -45,6 +45,7 @@ def create_app_icon():
 class AppSignals(QObject):
     status_changed = Signal(str)
     transcription = Signal(str, str)
+    error = Signal(str)
 
 class VocynApp:
     def __init__(self):
@@ -63,6 +64,7 @@ class VocynApp:
         self.signals = AppSignals()
         self.signals.status_changed.connect(self._on_status_changed)
         self.signals.transcription.connect(self._on_transcription)
+        self.signals.error.connect(self._on_error)
         
         # Initialize UI Components
         self.main_window = MainWindow()
@@ -70,7 +72,8 @@ class VocynApp:
         # Initialize Service
         self.dictation_service = DictationService(
             status_callback=self.signals.status_changed.emit,
-            transcription_callback=self.signals.transcription.emit
+            transcription_callback=self.signals.transcription.emit,
+            error_callback=self.signals.error.emit
         )
         
         # Initialize Tray
@@ -101,6 +104,10 @@ class VocynApp:
     def _on_transcription(self, text, language):
         """Called by service when text is transcribed."""
         self.main_window.add_transcription(text)
+        
+    def _on_error(self, message):
+        """Called when an error (like LLM failure) occurs."""
+        self.tray_icon.showMessage("Vocyn Error", message, QSystemTrayIcon.Warning, 3000)
         
     def show_main_window(self):
         self.main_window.show()

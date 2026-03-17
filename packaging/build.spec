@@ -21,7 +21,9 @@ a = Analysis(
         'pynput.keyboard._win32',
         'pynput.mouse._win32',
         'faster_whisper',
-        'deep_translator'
+        'deep_translator',
+        'openai',
+        'groq'
     ],
     hookspath=[],
     hooksconfig={},

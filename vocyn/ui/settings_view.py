@@ -1,7 +1,8 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QComboBox, QCheckBox, QPushButton, QSlider,
-    QRadioButton, QButtonGroup, QGroupBox, QScrollArea, QFrame
+    QRadioButton, QButtonGroup, QGroupBox, QScrollArea, QFrame,
+    QLineEdit
 )
 from PySide6.QtCore import Qt, Signal
 from vocyn.config import config
@@ -9,6 +10,21 @@ from vocyn.audio import get_available_microphones
 
 class SettingsView(QWidget):
     settings_saved = Signal()
+
+    MODEL_HIERARCHY = {
+        "OpenAI": {
+            "GPT-5": ["gpt-5.4", "gpt-5.4-thinking", "gpt-5.4-pro"],
+            "GPT-4": ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo"],
+            "Reasoning": ["o1", "o1-mini"],
+            "Audio": ["whisper-1"]
+        },
+        "Groq": {
+            "Fast GPT OSS": ["openai/gpt-oss-120b", "openai/gpt-oss-20b"],
+            "LLaMA": ["llama-3.1-8b-instant", "llama-3.3-70b-versatile"],
+            "Reasoning": ["deepseek-r1-distill-llama-70b", "qwen/qwen3-32b"],
+            "Whisper": ["whisper-large-v3", "whisper-large-v3-turbo"]
+        }
+    }
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -172,8 +188,43 @@ class SettingsView(QWidget):
                 self.combo_target_lang.addItem(lbl, userData=val)
         
         trans_container_layout.addWidget(self.combo_target_lang)
+        
         trans_container_layout.addStretch()
         layout.addWidget(self.trans_container)
+        
+        # LLM Refinement
+        self.create_section_label(layout, "LLM Refinement", "Refine transcriptions using an external LLM.")
+        llm_layout = QHBoxLayout()
+        
+        self.combo_llm_provider = QComboBox()
+        self.combo_llm_provider.addItems(["None", "OpenAI", "Groq"])
+        llm_layout.addWidget(self.combo_llm_provider)
+        
+        self.combo_llm_category = QComboBox()
+        llm_layout.addWidget(self.combo_llm_category)
+        
+        self.combo_llm_model = QComboBox()
+        self.combo_llm_model.setEditable(True)
+        llm_layout.addWidget(self.combo_llm_model)
+        
+        self.input_llm_api_key = QLineEdit()
+        self.input_llm_api_key.setPlaceholderText("API Key")
+        self.input_llm_api_key.setEchoMode(QLineEdit.Password)
+        self.input_llm_api_key.setStyleSheet("""
+            QLineEdit {
+                background-color: #111111;
+                color: #FFFFFF;
+                border: 1px solid #333333;
+                border-radius: 6px;
+                padding: 6px 12px;
+                min-height: 20px;
+            }
+        """)
+        llm_layout.addWidget(self.input_llm_api_key)
+        
+        self.combo_llm_provider.currentTextChanged.connect(self.on_llm_provider_changed)
+        self.combo_llm_category.currentTextChanged.connect(self.on_llm_category_changed)
+        layout.addLayout(llm_layout)
         
         # Model
         self.create_section_label(layout, "Transcription Model", "Larger models are more accurate but slower.")
@@ -240,6 +291,24 @@ class SettingsView(QWidget):
         is_translate = self.radio_translate.isChecked()
         self.combo_target_lang.setVisible(is_translate)
 
+    def on_llm_provider_changed(self, text):
+        self.input_llm_api_key.setVisible(text != "None")
+        self.combo_llm_category.setVisible(text != "None")
+        self.combo_llm_model.setVisible(text != "None")
+        
+        self.combo_llm_category.clear()
+        if text in self.MODEL_HIERARCHY:
+            self.combo_llm_category.addItems(list(self.MODEL_HIERARCHY[text].keys()))
+
+    def on_llm_category_changed(self, category):
+        provider = self.combo_llm_provider.currentText()
+        if provider in self.MODEL_HIERARCHY and category in self.MODEL_HIERARCHY[provider]:
+            current_model = self.combo_llm_model.currentText()
+            self.combo_llm_model.clear()
+            self.combo_llm_model.addItems(self.MODEL_HIERARCHY[provider][category])
+            if current_model in self.MODEL_HIERARCHY[provider][category]:
+                self.combo_llm_model.setCurrentText(current_model)
+
     def load_current_settings(self):
         mic = config.get("audio_device")
         idx = self.combo_mic.findText(mic)
@@ -253,7 +322,7 @@ class SettingsView(QWidget):
         target_lang = config.get("target_language", "en")
         idx = self.combo_target_lang.findData(target_lang)
         if idx >= 0: self.combo_target_lang.setCurrentIndex(idx)
-        self.combo_target_lang.setVisible(is_translate)
+        
         model = config.get("model")
         idx = self.combo_model.findText(model)
         if idx >= 0: self.combo_model.setCurrentIndex(idx)
@@ -262,6 +331,23 @@ class SettingsView(QWidget):
         hotkey = config.get("hotkey")
         self.combo_hotkey.setCurrentText(hotkey)
         self.check_tray.setChecked(config.get("run_minimized", True))
+        
+        llm_prov = config.get("llm_provider", "None")
+        idx = self.combo_llm_provider.findText(llm_prov)
+        if idx >= 0: self.combo_llm_provider.setCurrentIndex(idx)
+        
+        self.on_llm_provider_changed(llm_prov)
+        
+        # Try to find category for current model to set it correctly
+        saved_model = config.get("llm_model", "")
+        if llm_prov in self.MODEL_HIERARCHY:
+            for cat, models in self.MODEL_HIERARCHY[llm_prov].items():
+                if saved_model in models:
+                    self.combo_llm_category.setCurrentText(cat)
+                    break
+        
+        self.combo_llm_model.setCurrentText(saved_model)
+        self.input_llm_api_key.setText(config.get("llm_api_key", ""))
         
     def save_settings(self):
         config.set("audio_device", self.combo_mic.currentText())
@@ -272,4 +358,7 @@ class SettingsView(QWidget):
         config.set("silence_timeout", self.slider_timeout.value() / 10.0)
         config.set("hotkey", self.combo_hotkey.currentText().lower())
         config.set("run_minimized", self.check_tray.isChecked())
+        config.set("llm_provider", self.combo_llm_provider.currentText())
+        config.set("llm_model", self.combo_llm_model.currentText())
+        config.set("llm_api_key", self.input_llm_api_key.text())
         self.settings_saved.emit()

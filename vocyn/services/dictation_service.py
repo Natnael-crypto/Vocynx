@@ -10,15 +10,17 @@ from vocyn.hotkeys import GlobalHotkeyManager
 from vocyn.typer import type_text
 
 class DictationService:
-    def __init__(self, status_callback=None, transcription_callback=None, audio_level_callback=None):
+    def __init__(self, status_callback=None, transcription_callback=None, audio_level_callback=None, error_callback=None):
         self.status_callback = status_callback
         self.transcription_callback = transcription_callback
         self.audio_level_callback = audio_level_callback
+        self.error_callback = error_callback
         
         self.worker = TranscriptionWorker(
             model_loaded_callback=self._on_model_loaded,
             transcription_result_callback=self._on_transcription,
-            audio_level_callback=self.audio_level_callback
+            audio_level_callback=self.audio_level_callback,
+            error_callback=self.error_callback
         )
         
         self.hotkey_manager = GlobalHotkeyManager(

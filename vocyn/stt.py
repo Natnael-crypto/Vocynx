@@ -26,7 +26,7 @@ def is_speech(audio):
     return energy > ENERGY_THRESHOLD
 
 class TranscriptionWorker:
-    def __init__(self, model_loaded_callback=None, transcription_result_callback=None, audio_level_callback=None):
+    def __init__(self, model_loaded_callback=None, transcription_result_callback=None, audio_level_callback=None, error_callback=None):
         self.model = None
         self.audio_queue = queue.Queue()
         self.is_recording = False
@@ -35,6 +35,7 @@ class TranscriptionWorker:
         self.model_loaded_callback = model_loaded_callback
         self.transcription_result_callback = transcription_result_callback
         self.audio_level_callback = audio_level_callback
+        self.error_callback = error_callback
         self.current_buffer = []
         self.speech_active = False
         self.last_speech_time = None
@@ -157,6 +158,9 @@ class TranscriptionWorker:
         translate_mode = config.get("translate", False)
         target_lang = config.get("target_language", "en")
         input_lang = config.get("language", "auto")
+        llm_provider = config.get("llm_provider", "None")
+        llm_model = config.get("llm_model", "")
+        llm_api_key = config.get("llm_api_key", "")
         
         whisper_lang = None if input_lang == "auto" else input_lang
         
@@ -176,6 +180,16 @@ class TranscriptionWorker:
             
             text = " ".join(segment.text for segment in segments).strip()
             
+            # Refine transcription with LLM if configured
+            if llm_provider != "None" and llm_api_key and text:
+                print("Refining transcription with LLM...")
+                print(f"Provider: {llm_provider}")
+                print(f"Model: {llm_model}")
+                print(f"API Key: {llm_api_key}")
+                print(f"Text: {text}")
+                text = self._refine_with_llm(text, llm_provider, llm_api_key, llm_model)
+                print(f"Refined Text: {text}")
+
             # If translation is enabled and target is NOT English, or if Whisper failed to translate to English
             if translate_mode and text:
                 if target_lang != "en":
@@ -204,6 +218,59 @@ class TranscriptionWorker:
         except Exception as e:
             # print(f"Transcription error: {e}")
             pass
+
+    def _refine_with_llm(self, text, provider, api_key, model=None):
+        from vocyn.prompts import REFINEMENT_SYSTEM_PROMPT
+        system_prompt = REFINEMENT_SYSTEM_PROMPT
+        if provider == "OpenAI":
+            if not model: model = "gpt-3.5-turbo"
+            try:
+                from openai import OpenAI
+                client = OpenAI(api_key=api_key)
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": text}
+                    ],
+                    max_tokens=1024,
+                    temperature=0.3
+                )
+                if response.choices:
+                    return response.choices[0].message.content.strip()
+            except ImportError:
+                msg = "OpenAI library not installed."
+                print(msg)
+                if self.error_callback: self.error_callback(msg)
+            except Exception as e:
+                msg = f"OpenAI API Error: {e}"
+                print(msg)
+                if self.error_callback: self.error_callback(msg)
+        elif provider == "Groq":
+            if not model: model = "llama3-8b-8192"
+            try:
+                from groq import Groq
+                client = Groq(api_key=api_key)
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": text}
+                    ],
+                    max_tokens=1024,
+                    temperature=0.3
+                )
+                if response.choices:
+                    return response.choices[0].message.content.strip()
+            except ImportError:
+                msg = "Groq library not installed."
+                print(msg)
+                if self.error_callback: self.error_callback(msg)
+            except Exception as e:
+                msg = f"Groq API Error: {e}"
+                print(msg)
+                if self.error_callback: self.error_callback(msg)
+        return text
 
     def process_queue(self):
         """Main loop designed to run in a background thread to process audio frames."""

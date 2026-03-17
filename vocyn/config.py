@@ -22,7 +22,10 @@ class Config:
             "target_language": "en",
             "theme": "dark",
             "cpu_limit": 50,
-            "gpu_acceleration": False
+            "gpu_acceleration": False,
+            "llm_provider": "None",
+            "llm_model": "",
+            "llm_api_key": ""
         }
         
         self.settings = self.default_config.copy()
