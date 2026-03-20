@@ -101,19 +101,18 @@ class SettingRow(QFrame):
 class SettingsView(QWidget):
     settings_saved = Signal()
 
-    MODEL_HIERARCHY = {
-        "OpenAI": {
-            "GPT-5": ["gpt-5.4", "gpt-5.4-thinking", "gpt-5.4-pro"],
-            "GPT-4": ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo"],
-            "Reasoning": ["o1", "o1-mini"],
-            "Audio": ["whisper-1"]
-        },
-        "Groq": {
-            "Fast GPT OSS": ["openai/gpt-oss-120b", "openai/gpt-oss-20b"],
-            "LLaMA": ["llama-3.1-8b-instant", "llama-3.3-70b-versatile"],
-            "Reasoning": ["deepseek-r1-distill-llama-70b", "qwen/qwen3-32b"],
-            "Whisper": ["whisper-large-v3", "whisper-large-v3-turbo"]
-        }
+    MODELS = {
+        "OpenAI": [
+            "gpt-5.4", "gpt-5.4-thinking", "gpt-5.4-pro",
+            "gpt-4o", "gpt-4o-mini", "gpt-4-turbo",
+            "o1", "o1-mini", "whisper-1"
+        ],
+        "Groq": [
+            "openai/gpt-oss-120b", "openai/gpt-oss-20b",
+            "llama-3.1-8b-instant", "llama-3.3-70b-versatile",
+            "deepseek-r1-distill-llama-70b", "qwen/qwen3-32b",
+            "whisper-large-v3", "whisper-large-v3-turbo"
+        ]
     }
 
     COMBO_STYLE = f"""
@@ -339,13 +338,6 @@ class SettingsView(QWidget):
         row_provider.add_control(self.combo_llm_provider)
         sec_llm.add_row(row_provider)
         
-        self.row_category = SettingRow("Category")
-        self.combo_llm_category = NonScrollingComboBox()
-        self.combo_llm_category.setStyleSheet(self.COMBO_STYLE)
-        self.combo_llm_category.setFixedWidth(110)
-        self.row_category.add_control(self.combo_llm_category)
-        sec_llm.add_row(self.row_category)
-        
         self.row_model = SettingRow("Model")
         self.combo_llm_model = NonScrollingComboBox()
         self.combo_llm_model.setStyleSheet(self.COMBO_STYLE)
@@ -364,7 +356,6 @@ class SettingsView(QWidget):
         sec_llm.add_row(self.row_apikey)
         
         self.combo_llm_provider.currentTextChanged.connect(self.on_llm_provider_changed)
-        self.combo_llm_category.currentTextChanged.connect(self.on_llm_category_changed)
         layout.addWidget(sec_llm)
 
         # ── Transcription Model Section ──
@@ -474,22 +465,15 @@ class SettingsView(QWidget):
 
     def on_llm_provider_changed(self, text):
         show = text != "None"
-        self.row_category.setVisible(show)
         self.row_model.setVisible(show)
         self.row_apikey.setVisible(show)
         self.input_llm_api_key.setVisible(show)
         
-        self.combo_llm_category.clear()
-        if text in self.MODEL_HIERARCHY:
-            self.combo_llm_category.addItems(list(self.MODEL_HIERARCHY[text].keys()))
-
-    def on_llm_category_changed(self, category):
-        provider = self.combo_llm_provider.currentText()
-        if provider in self.MODEL_HIERARCHY and category in self.MODEL_HIERARCHY[provider]:
+        if text in self.MODELS:
             current_model = self.combo_llm_model.currentText()
             self.combo_llm_model.clear()
-            self.combo_llm_model.addItems(self.MODEL_HIERARCHY[provider][category])
-            if current_model in self.MODEL_HIERARCHY[provider][category]:
+            self.combo_llm_model.addItems(self.MODELS[text])
+            if current_model in self.MODELS[text]:
                 self.combo_llm_model.setCurrentText(current_model)
 
     def load_current_settings(self):
@@ -522,12 +506,6 @@ class SettingsView(QWidget):
         self.on_llm_provider_changed(llm_prov)
         
         saved_model = config.get("llm_model", "")
-        if llm_prov in self.MODEL_HIERARCHY:
-            for cat, models in self.MODEL_HIERARCHY[llm_prov].items():
-                if saved_model in models:
-                    self.combo_llm_category.setCurrentText(cat)
-                    break
-        
         self.combo_llm_model.setCurrentText(saved_model)
         self.input_llm_api_key.setText(config.get("llm_api_key", ""))
         

@@ -2,9 +2,9 @@ from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
     QLabel, QPushButton, QFrame, QScrollArea, QSizePolicy,
     QApplication, QToolTip, QStackedWidget, QGraphicsDropShadowEffect,
-    QToolButton
+    QToolButton, QGraphicsOpacityEffect
 )
-from PySide6.QtCore import Qt, QSize, Signal, QPoint, QPropertyAnimation, QEasingCurve
+from PySide6.QtCore import Qt, QSize, Signal, QPoint, QPropertyAnimation, QEasingCurve, QTimer
 from PySide6.QtGui import QFont, QIcon, QColor, QCursor, QPixmap, QPainter, QPainterPath
 import os
 import sys
@@ -112,6 +112,57 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
 }}
 """
 
+class ToastNotification(QWidget):
+    """A premium toast notification that fades in and out."""
+    def __init__(self, message, parent=None):
+        super().__init__(parent)
+        self.setWindowFlags(Qt.ToolTip | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.WindowTransparentForInput)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        
+        self.label = QLabel(message)
+        self.label.setStyleSheet(f"""
+            QLabel {{
+                color: {C_PRIMARY_FG};
+                background-color: {C_PRIMARY};
+                border-radius: 20px;
+                padding: 10px 24px;
+                font-size: 13px;
+                font-weight: 600;
+                font-family: 'Inter', sans-serif;
+            }}
+        """)
+        self.label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.label)
+        
+        self.opacity_effect = QGraphicsOpacityEffect(self)
+        self.setGraphicsEffect(self.opacity_effect)
+        
+        self.animation = QPropertyAnimation(self.opacity_effect, b"opacity")
+        self.animation.setDuration(400)
+        self.animation.setEasingCurve(QEasingCurve.OutCubic)
+        
+        self.timer = QTimer(self)
+        self.timer.setSingleShot(True)
+        self.timer.timeout.connect(self.hide_toast)
+        
+    def show_toast(self):
+        self.show()
+        self.animation.stop()
+        self.animation.setStartValue(0)
+        self.animation.setEndValue(1)
+        self.animation.start()
+        self.timer.start(3000)
+        
+    def hide_toast(self):
+        self.animation.stop()
+        self.animation.setStartValue(self.opacity_effect.opacity())
+        self.animation.setEndValue(0)
+        self.animation.finished.connect(self.deleteLater)
+        self.animation.start()
+
 
 class ActivityItemWidget(QFrame):
     """Single activity item matching the NewUI design."""
@@ -152,10 +203,31 @@ class ActivityItemWidget(QFrame):
             lbl_text.setStyleSheet(f"color: {C_FG}; font-size: 13px; border: none;")
         lbl_text.setWordWrap(True)
         layout.addWidget(lbl_text, 1)
+
+        # Copied Badge
+        self.lbl_copied = QLabel("Copied!")
+        self.lbl_copied.setStyleSheet(f"""
+            QLabel {{
+                background-color: {C_SECONDARY};
+                color: {C_FG};
+                font-size: 10px;
+                font-weight: 700;
+                padding: 2px 8px;
+                border-radius: 10px;
+                border: none;
+            }}
+        """)
+        self.lbl_copied.hide()
+        layout.addWidget(self.lbl_copied)
     
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
+            self.show_feedback()
             self.clicked.emit(self.text_content)
+
+    def show_feedback(self):
+        self.lbl_copied.show()
+        QTimer.singleShot(1200, self.lbl_copied.hide)
 
 
 class StatPill(QFrame):
@@ -524,7 +596,20 @@ class MainWindow(QMainWindow):
     def copy_to_clipboard(self, text):
         clipboard = QApplication.clipboard()
         clipboard.setText(text)
-        QToolTip.showText(QCursor.pos(), "Copied to clipboard!", msecShowTime=1500)
+        self.show_toast("✓  Copied to clipboard")
+
+    def show_toast(self, message):
+        # Position toast in bottom center of the window
+        toast = ToastNotification(message, self)
+        toast.adjustSize()
+        
+        # Calculate position relative to MainWindow
+        x = (self.width() - toast.width()) // 2
+        y = self.height() - 110 # Above the floating nav
+        
+        global_pos = self.mapToGlobal(QPoint(x, y))
+        toast.move(global_pos)
+        toast.show_toast()
 
     def clear_transcriptions(self):
         self.recent_transcriptions = []
