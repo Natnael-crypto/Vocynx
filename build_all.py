@@ -5,14 +5,14 @@ import shutil
 from pathlib import Path
 
 def build_app():
-    print("--- Building Vocyn Application ---")
+    print("--- Building Vocynx Application ---")
     # Build the main app using the spec file
-    # This will create dist/vocyn/vocyn.exe (or similar depending on spec)
+    # This will create dist/vocynx/vocynx.exe (or similar depending on spec)
     subprocess.run(["pyinstaller", "--noconfirm", "packaging/build.spec"], check=True)
     print("App build complete.")
 
 def build_installer():
-    print("\n--- Building Vocyn Installer ---")
+    print("\n--- Building Vocynx Installer ---")
     # Build the installer as a single-file EXE
     # --onefile: bundle everything into one EXE
     # --windowed: no console window
@@ -22,13 +22,13 @@ def build_installer():
         "--noconfirm",
         "--onefile",
         "--windowed",
-        "--name", "VocynInstaller",
+        "--name", "VocynxInstaller",
         "--add-data", f"installer_utils.py{os.pathsep}.",
         "installer.py"
     ]
     
     # Add icon if it exists
-    icon_path = Path("vocyn_icon.png")
+    icon_path = Path("vocynx_icon.png")
     if icon_path.exists():
         cmd.extend(["--icon", str(icon_path)])
         
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     build_app()
     
     # Report app size
-    app_exe = dist_dir / "vocyn.exe"
+    app_exe = dist_dir / "vocynx.exe"
     if app_exe.exists():
         size_mb = app_exe.stat().st_size / (1024 * 1024)
         print(f"\nSUCCESS: Optimized app size: {size_mb:.2f} MB")

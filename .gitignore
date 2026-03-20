@@ -29,7 +29,7 @@ build/
 *.exe
 *.pkg
 *.spec
-vocyn.egg-info/
+vocynx.egg-info/
 .installed.cfg
 manifest
 installer/build/

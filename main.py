@@ -5,21 +5,21 @@ from PySide6.QtGui import QIcon, QPixmap, QColor
 from PySide6.QtCore import Qt, QObject, Signal
 import ctypes
 
-from vocyn.config import config
-from vocyn.ui.main_window import MainWindow
-from vocyn.ui.tray_icon import TrayIcon
-from vocyn.ui.floating_widget import FloatingWidget
-from vocyn.services.dictation_service import DictationService
+from vocynx.config import config
+from vocynx.ui.main_window import MainWindow
+from vocynx.ui.tray_icon import TrayIcon
+from vocynx.ui.floating_widget import FloatingWidget
+from vocynx.services.dictation_service import DictationService
 
 
 def create_app_icon():
     """Load the app icon from file, or create a simple generated icon as fallback."""
     if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
         # Running in a PyInstaller bundle
-        icon_path = os.path.join(sys._MEIPASS, "vocyn_icon.ico")
+        icon_path = os.path.join(sys._MEIPASS, "vocynx_icon.ico")
     else:
         # Running in normal python environment
-        icon_path = os.path.join(os.path.dirname(__file__), "vocyn_icon.ico")
+        icon_path = os.path.join(os.path.dirname(__file__), "vocynx_icon.ico")
         
     if os.path.exists(icon_path):
         return QIcon(icon_path)
@@ -49,13 +49,13 @@ class AppSignals(QObject):
     transcription = Signal(str, str)
     error = Signal(str)
 
-class VocynApp:
+class VocynxApp:
     def __init__(self):
         self.app = QApplication(sys.argv)
         
         # Set AppUserModelID for Windows taskbar grouping
         if sys.platform == 'win32':
-            myappid = 'natnael.vocyn.1.0' # arbitrary string
+            myappid = 'natnael.vocynx.1.0' # arbitrary string
             ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
             
         self.app.setQuitOnLastWindowClosed(False) # Keep running in tray
@@ -111,7 +111,7 @@ class VocynApp:
             self.floating_widget.hide_widget()
         
         if config.get("desktop_notifications", True) and status in ["Listening", "Processing"]:
-            self.tray_icon.showMessage("Vocyn", f"Dictation: {status}", QSystemTrayIcon.Information, 1000)
+            self.tray_icon.showMessage("Vocynx", f"Dictation: {status}", QSystemTrayIcon.Information, 1000)
 
 
     def _on_transcription(self, text, language):
@@ -120,7 +120,7 @@ class VocynApp:
         
     def _on_error(self, message):
         """Called when an error (like LLM failure) occurs."""
-        self.tray_icon.showMessage("Vocyn Error", message, QSystemTrayIcon.Warning, 3000)
+        self.tray_icon.showMessage("Vocynx Error", message, QSystemTrayIcon.Warning, 3000)
         
     def show_main_window(self):
         self.main_window.show()
@@ -162,10 +162,10 @@ class VocynApp:
         return self.app.exec()
 
 def main():
-    print("[INFO] Vocyn started")
+    print("[INFO] Vocynx started")
     print("[INFO] Open source licenses loaded")
     # Only allow single instance (simple check)
-    lock_file = os.path.join(os.path.expanduser("~"), ".vocyn", "app.lock")
+    lock_file = os.path.join(os.path.expanduser("~"), ".vocynx", "app.lock")
     try:
         os.makedirs(os.path.dirname(lock_file), exist_ok=True)
         # Using a simple file lock. If we can't delete it, it might be in use
@@ -173,13 +173,13 @@ def main():
             try:
                 os.remove(lock_file)
             except OSError:
-                # logger.error("Vocyn is already running.")
+                # logger.error("Vocynx is already running.")
                 sys.exit(1)
                 
         with open(lock_file, 'w') as f:
             f.write(str(os.getpid()))
             
-        app = VocynApp()
+        app = VocynxApp()
         exit_code = app.run()
         
         # Cleanup

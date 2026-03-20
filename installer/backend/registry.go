@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	UninstallKeyPath = `Software\Microsoft\Windows\CurrentVersion\Uninstall\Vocyn`
+	UninstallKeyPath = `Software\Microsoft\Windows\CurrentVersion\Uninstall\Vocynx`
 	RunKeyPath       = `Software\Microsoft\Windows\CurrentVersion\Run`
 )
 
@@ -55,11 +55,11 @@ func SetAutoStart(enable bool, appPath string) error {
 	defer k.Close()
 
 	if enable {
-		if err := k.SetStringValue("Vocyn", `"`+appPath+`" --minimized`); err != nil {
+		if err := k.SetStringValue("Vocynx", `"`+appPath+`" --minimized`); err != nil {
 			return err
 		}
 	} else {
-		_ = k.DeleteValue("Vocyn")
+		_ = k.DeleteValue("Vocynx")
 	}
 
 	return nil

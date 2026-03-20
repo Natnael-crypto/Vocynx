@@ -10,18 +10,18 @@ const WelcomeScreen: React.FC<Props> = ({ onNext }) => (
         Getting started
       </div>
       <h1 style={{ fontSize: 24, fontWeight: 700, color: '#111111', letterSpacing: '-0.03em', margin: 0, lineHeight: 1.15 }}>
-        Welcome to Vocyn
+        Welcome to Vocynx
       </h1>
       <p style={{ color: '#888888', fontSize: 13, marginTop: 8, lineHeight: 1.6, maxWidth: 360 }}>
-        This wizard will guide you through a quick installation of Vocyn on your Windows PC.
+        This wizard will guide you through a quick installation of Vocynx on your Windows PC.
       </p>
     </div>
 
     {/* Feature rows — text-only, no icon clutter */}
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
       {[
-        ['Local AI Transcription',  'Converts speech to text on your device — no internet required.'],
-        ['Private by Design',       'Audio never leaves your machine. Everything stays local.'],
+        ['Local AI Transcription',  'Converts speech to text on your device.'],
+        ['Private by Design',       'Audio never leaves your machine.'],
         ['Lightweight & Fast',      'Under 150 MB. Launches in seconds.'],
       ].map(([title, desc]) => (
         <div key={title} style={{

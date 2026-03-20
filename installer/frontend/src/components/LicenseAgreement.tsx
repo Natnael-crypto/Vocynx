@@ -2,25 +2,25 @@ import React, { useState } from 'react';
 
 interface Props { onNext: () => void; onBack: () => void; }
 
-const LICENSE_TEXT = `VOCYN END USER LICENSE AGREEMENT — Last Updated: March 2026
+const LICENSE_TEXT = `VOCYNX END USER LICENSE AGREEMENT — Last Updated: March 2026
 
 1. GRANT OF LICENSE
-Vocyn grants you a non-exclusive, non-transferable license to install and use the Vocyn software ("Software") solely for your own personal or internal business purposes.
+Vocynx grants you a non-exclusive, non-transferable license to install and use the Vocynx software ("Software") solely for your own personal or internal business purposes.
 
 2. RESTRICTIONS
 You may not: (a) copy the Software except for backup purposes; (b) modify, adapt, or create derivative works; (c) reverse engineer or attempt to extract source code; (d) sell, sublicense, rent, or transfer the Software to any third party.
 
 3. PRIVACY & DATA
-Vocyn processes all audio locally on your device. No audio data is sent to external servers unless you have explicitly opted in to optional cloud features. Only anonymised crash diagnostics are collected, with your consent.
+Vocynx processes all audio locally on your device. No audio data is sent to external servers unless you have explicitly opted in to optional cloud features. Only anonymised crash diagnostics are collected, with your consent.
 
 4. INTELLECTUAL PROPERTY
-All rights in the Software, including copyrights, remain with Vocyn and its licensors.
+All rights in the Software, including copyrights, remain with Vocynx and its licensors.
 
 5. NO WARRANTY
-THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND. VOCYN DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING FITNESS FOR A PARTICULAR PURPOSE.
+THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND. VOCYNX DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING FITNESS FOR A PARTICULAR PURPOSE.
 
 6. LIMITATION OF LIABILITY
-IN NO EVENT SHALL VOCYN BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES ARISING FROM THE USE OF THIS SOFTWARE.
+IN NO EVENT SHALL VOCYNX BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES ARISING FROM THE USE OF THIS SOFTWARE.
 
 7. TERMINATION
 This license terminates automatically if you fail to comply with any of its terms.

@@ -9,7 +9,7 @@ import sys
 
 def get_asset_path(filename):
     if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, 'vocyn', 'assets', filename)
+        return os.path.join(sys._MEIPASS, 'vocynx', 'assets', filename)
     return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", filename)
 
 # ─── Light Theme Colors ──────────────────────────────────────────────────────
@@ -159,7 +159,7 @@ class AboutView(QWidget):
             scaled = pixmap.scaledToHeight(64, Qt.SmoothTransformation)
             lbl_logo.setPixmap(scaled)
         else:
-            lbl_logo.setText("Vocyn")
+            lbl_logo.setText("Vocynx")
             lbl_logo.setStyleSheet(f"font-size: 32px; font-weight: 700; color: {C_FG}; border: none;")
         app_card_layout.addWidget(lbl_logo)
         
@@ -248,14 +248,14 @@ class AboutView(QWidget):
         links_layout.setContentsMargins(0, 0, 0, 0)
         links_layout.setSpacing(0)
         
-        links_layout.addWidget(LinkButton("Source Code", "https://github.com/Natnael-crypto/Vocyn/tree/master"))
+        links_layout.addWidget(LinkButton("Source Code", "https://github.com/Natnael-crypto/Vocynx/tree/master"))
         links_layout.addWidget(LinkButton("Contact Support", "mailto:yohannesnatnael9@gmail.com"))
         
         layout.addWidget(links_card)
         layout.addSpacing(32)
         
         # ── Footer ──
-        lbl_footer = QLabel("Made by the Vocyn contributors")
+        lbl_footer = QLabel("Made by the Vocynx contributors")
         lbl_footer.setAlignment(Qt.AlignCenter)
         lbl_footer.setStyleSheet(f"font-size: 11px; color: {C_MUTED_FG};")
         layout.addWidget(lbl_footer)

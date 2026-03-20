@@ -49,7 +49,7 @@ class DownloadWorker(QThread):
 class InstallerWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Vocyn Installer")
+        self.setWindowTitle("Vocynx Installer")
         self.setFixedSize(600, 450)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -67,7 +67,7 @@ class InstallerWindow(QMainWindow):
         self.title_bar = QWidget()
         self.title_bar.setFixedHeight(40)
         title_layout = QHBoxLayout(self.title_bar)
-        title_label = QLabel("Vocyn Setup")
+        title_label = QLabel("Vocynx Setup")
         title_label.setStyleSheet("color: #888; font-weight: bold; margin-left: 10px;")
         
         self.close_btn = QPushButton("×")
@@ -146,15 +146,15 @@ class InstallerWindow(QMainWindow):
         
         logo_label = QLabel()
         # Use a placeholder if icon doesn't exist yet
-        icon_path = os.path.join(os.path.dirname(__file__), "vocyn_icon.png")
+        icon_path = os.path.join(os.path.dirname(__file__), "vocynx_icon.png")
         if os.path.exists(icon_path):
             logo_label.setPixmap(QPixmap(icon_path).scaled(120, 120, Qt.KeepAspectRatio, Qt.SmoothTransformation))
         else:
-            logo_label.setText("VOCYN")
+            logo_label.setText("VOCYNX")
             logo_label.setStyleSheet("font-size: 48px; font-weight: bold; color: white;")
         logo_label.setAlignment(Qt.AlignCenter)
         
-        welcome_title = QLabel("Welcome to Vocyn")
+        welcome_title = QLabel("Welcome to Vocynx")
         welcome_title.setStyleSheet("font-size: 24px; font-weight: bold; margin-top: 20px;")
         welcome_title.setAlignment(Qt.AlignCenter)
         
@@ -189,7 +189,7 @@ class InstallerWindow(QMainWindow):
         try:
             # Try to read from privacy_policy.md if it exists in the same dir for simplicity
             # For now, hardcode a brief version
-            license_text.setPlainText("Vocyn Privacy & License Agreement\n\n1. Local Privacy: All audio stays on your device.\n2. No Tracking: We do not collect your data.\n3. Usage: You agree to use this software for productive purposes.\n\nFull terms at: https://vocyn.io/terms")
+            license_text.setPlainText("Vocynx Privacy & License Agreement\n\n1. Local Privacy: All audio stays on your device.\n2. No Tracking: We do not collect your data.\n3. Usage: You agree to use this software for productive purposes.\n\nFull terms at: https://vocynx.io/terms")
         except:
             license_text.setPlainText("Loading agreement...")
             
@@ -252,11 +252,11 @@ class InstallerWindow(QMainWindow):
         title.setStyleSheet("font-size: 24px; font-weight: bold;")
         title.setAlignment(Qt.AlignCenter)
         
-        desc = QLabel("Vocyn is now ready to use. It will start with Windows.")
+        desc = QLabel("Vocynx is now ready to use. It will start with Windows.")
         desc.setStyleSheet("color: #888;")
         desc.setAlignment(Qt.AlignCenter)
         
-        launch_btn = QPushButton("Launch Vocyn")
+        launch_btn = QPushButton("Launch Vocynx")
         launch_btn.setFixedWidth(200)
         launch_btn.clicked.connect(self.launch_app)
         
@@ -292,8 +292,8 @@ class InstallerWindow(QMainWindow):
         self.progress_bar.setValue(10)
         # Note: In compiled version, target would be the .exe, but for now we point to script
         # In build_all.py we'll adjust this or handle it via a wrapper
-        target_exe = os.path.join(app_dir, "vocyn.exe") if getattr(sys, 'frozen', False) else main_py
-        create_shortcut(target_exe, "Vocyn")
+        target_exe = os.path.join(app_dir, "vocynx.exe") if getattr(sys, 'frozen', False) else main_py
+        create_shortcut(target_exe, "Vocynx")
 
         # 4. Start model downloads in background
         self.worker = DownloadWorker(["tiny", "base"], str(app_dir / "models"))

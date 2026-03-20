@@ -30,4 +30,4 @@ def create_modern_beep(filename, freqs_and_durations, sample_rate=44100):
                 wav_file.writeframes(packed_value)
 
 # Generate a high-tech/modern start sound (two warm ascending notes)
-create_modern_beep('d:/Project/Vocyn/vocyn/assets/start_rec.wav', [(523.25, 0.15), (783.99, 0.5)])
+create_modern_beep('d:/Project/Vocynx/vocynx/assets/start_rec.wav', [(523.25, 0.15), (783.99, 0.5)])

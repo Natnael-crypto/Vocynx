@@ -1,6 +1,6 @@
 // vite.config.ts
-import { defineConfig } from "file:///D:/Project/Vocyn/installer/frontend/node_modules/vite/dist/node/index.js";
-import react from "file:///D:/Project/Vocyn/installer/frontend/node_modules/@vitejs/plugin-react/dist/index.mjs";
+import { defineConfig } from "file:///D:/Project/Vocynx/installer/frontend/node_modules/vite/dist/node/index.js";
+import react from "file:///D:/Project/Vocynx/installer/frontend/node_modules/@vitejs/plugin-react/dist/index.mjs";
 var vite_config_default = defineConfig({
   plugins: [react()]
 });

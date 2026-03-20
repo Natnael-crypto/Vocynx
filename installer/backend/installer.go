@@ -13,10 +13,10 @@ import (
 
 // Embedded application assets — bundled at compile time.
 //
-//go:embed assets/vocyn.exe
+//go:embed assets/vocynx.exe
 var embeddedExe []byte
 
-//go:embed assets/vocyn_icon.ico
+//go:embed assets/vocynx_icon.ico
 var embeddedIcon []byte
 
 type Installer struct {
@@ -39,7 +39,7 @@ type InstallOptions struct {
 
 func NewInstaller() *Installer {
 	return &Installer{
-		installPath: `C:\Program Files\Vocyn`,
+		installPath: `C:\Program Files\Vocynx`,
 		status:      "Idle",
 		stepTitle:   "Ready to Install",
 	}
@@ -54,7 +54,7 @@ func (i *Installer) CheckAdmin() bool {
 }
 
 func (i *Installer) GetDefaultPath() string {
-	return `C:\Program Files\Vocyn`
+	return `C:\Program Files\Vocynx`
 }
 
 func (i *Installer) StartInstallation(opts InstallOptions) {
@@ -83,7 +83,7 @@ func (i *Installer) runInstallation() {
 		return
 	}
 	i.logger = logger
-	i.logger.Log("Starting Vocyn installation...")
+	i.logger.Log("Starting Vocynx installation...")
 
 	// 2. Create installation directory
 	i.updateProgress(10, "Preparing", "Creating installation directory...")
@@ -93,18 +93,18 @@ func (i *Installer) runInstallation() {
 	}
 	i.logger.Log(fmt.Sprintf("Created directory: %s", i.installPath))
 
-	// 3. Extract vocyn.exe from embedded data
-	i.updateProgress(30, "Copying Files", "Extracting vocyn.exe...")
-	exeDst := filepath.Join(i.installPath, "vocyn.exe")
+	// 3. Extract vocynx.exe from embedded data
+	i.updateProgress(30, "Copying Files", "Extracting vocynx.exe...")
+	exeDst := filepath.Join(i.installPath, "vocynx.exe")
 	if err := writeEmbeddedFile(embeddedExe, exeDst, 0755); err != nil {
 		i.reportError(fmt.Sprintf("Failed to extract application: %v", err))
 		return
 	}
-	i.logger.Log(fmt.Sprintf("Extracted vocyn.exe → %s", exeDst))
+	i.logger.Log(fmt.Sprintf("Extracted vocynx.exe → %s", exeDst))
 
 	// 4. Extract icon
 	i.updateProgress(50, "Copying Files", "Extracting application icon...")
-	iconDst := filepath.Join(i.installPath, "vocyn_icon.ico")
+	iconDst := filepath.Join(i.installPath, "vocynx_icon.ico")
 	if err := writeEmbeddedFile(embeddedIcon, iconDst, 0644); err != nil {
 		i.logger.Log(fmt.Sprintf("Warning: failed to extract icon: %v", err))
 		// Non-fatal — continue
@@ -114,23 +114,23 @@ func (i *Installer) runInstallation() {
 
 	// 5. Create shortcuts
 	i.updateProgress(65, "Creating Shortcuts", "Creating Desktop & Start Menu shortcuts...")
-	desktopLnk := filepath.Join(GetDesktopPath(), "Vocyn.lnk")
-	startMenuLnk := filepath.Join(GetStartMenuPath(), "Vocyn.lnk")
+	desktopLnk := filepath.Join(GetDesktopPath(), "Vocynx.lnk")
+	startMenuLnk := filepath.Join(GetStartMenuPath(), "Vocynx.lnk")
 
 	i.logger.Log("Creating Desktop shortcut")
-	if err := CreateShortcut(exeDst, desktopLnk, "Vocyn — AI Transcription", iconDst); err != nil {
+	if err := CreateShortcut(exeDst, desktopLnk, "Vocynx — AI Transcription", iconDst); err != nil {
 		i.logger.Log(fmt.Sprintf("Desktop shortcut error: %v", err))
 	}
 
 	i.logger.Log("Creating Start Menu shortcut")
-	if err := CreateShortcut(exeDst, startMenuLnk, "Vocyn — AI Transcription", iconDst); err != nil {
+	if err := CreateShortcut(exeDst, startMenuLnk, "Vocynx — AI Transcription", iconDst); err != nil {
 		i.logger.Log(fmt.Sprintf("Start Menu shortcut error: %v", err))
 	}
 
 	// 6. Register in Add/Remove Programs
 	i.updateProgress(80, "Registering", "Writing registry entries...")
 	uninstallStr := fmt.Sprintf(`"%s" --uninstall`, exeDst)
-	if err := RegisterApp("Vocyn", "1.0.0", "Natnael-crypto", i.installPath, iconDst, uninstallStr); err != nil {
+	if err := RegisterApp("Vocynx", "1.0.0", "Natnael-crypto", i.installPath, iconDst, uninstallStr); err != nil {
 		i.logger.Log(fmt.Sprintf("Registry error: %v", err))
 	} else {
 		i.logger.Log("Registered in Add/Remove Programs")
@@ -147,7 +147,7 @@ func (i *Installer) runInstallation() {
 	}
 
 	// 8. Done
-	i.updateProgress(100, "Complete", "Vocyn has been installed successfully.")
+	i.updateProgress(100, "Complete", "Vocynx has been installed successfully.")
 	i.isFinished = true
 	i.logger.Log("Installation finished successfully.")
 	runtime.EventsEmit(i.ctx, "installation_finished", true)
@@ -181,7 +181,7 @@ func (i *Installer) reportError(msg string) {
 }
 
 func (i *Installer) LaunchApp() {
-	exePath := filepath.Join(i.installPath, "vocyn.exe")
+	exePath := filepath.Join(i.installPath, "vocynx.exe")
 	cmd := exec.Command(exePath)
 	if err := cmd.Start(); err != nil {
 		fmt.Printf("Failed to launch app: %v\n", err)

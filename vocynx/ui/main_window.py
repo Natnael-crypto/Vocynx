@@ -12,13 +12,13 @@ from datetime import datetime
 
 def get_asset_path(filename):
     if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, 'vocyn', 'assets', filename)
+        return os.path.join(sys._MEIPASS, 'vocynx', 'assets', filename)
     return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", filename)
 
-from vocyn.config import config
-from vocyn.ui.settings_view import SettingsView
-from vocyn.ui.licenses_view import LicensesView
-from vocyn.ui.about_view import AboutView
+from vocynx.config import config
+from vocynx.ui.settings_view import SettingsView
+from vocynx.ui.licenses_view import LicensesView
+from vocynx.ui.about_view import AboutView
 
 
 # ─── Light Theme Colors (from NewUI index.css :root) ─────────────────────────
@@ -261,7 +261,7 @@ class MainWindow(QMainWindow):
     
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Vocyn")
+        self.setWindowTitle("Vocynx")
         self.setFixedSize(420, 720)
         self.setStyleSheet(STYLESHEET)
         
@@ -437,7 +437,7 @@ class MainWindow(QMainWindow):
             scaled = pixmap.scaledToHeight(48, Qt.SmoothTransformation)
             lbl_logo.setPixmap(scaled)
         else:
-            lbl_logo.setText("Vocyn")
+            lbl_logo.setText("Vocynx")
             lbl_logo.setStyleSheet(f"font-size: 18px; font-weight: 700; color: {C_FG};")
         
         logo_layout.addWidget(lbl_logo)
@@ -484,7 +484,7 @@ class MainWindow(QMainWindow):
         banner_layout.addWidget(self.lbl_status_title)
         
         self.lbl_status_desc = QLabel(
-            f"Vocyn adapts to how you speak. "
+            f"Vocynx adapts to how you speak. "
             f"Ready on {config.get('audio_device', 'Default Microphone')}. "
             f"Hotkey: {config.get('hotkey', 'ctrl+alt+space').upper()}"
         )
@@ -540,7 +540,7 @@ class MainWindow(QMainWindow):
         model = config.get("model", "tiny").capitalize()
         
         self.lbl_status_desc.setText(
-            f"Vocyn adapts to how you speak. "
+            f"Vocynx adapts to how you speak. "
             f"Ready on {device}. Hotkey: {hotkey}"
         )
         

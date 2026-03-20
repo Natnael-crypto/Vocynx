@@ -6,13 +6,13 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QCursor
-from vocyn.config import config
+from vocynx.config import config
 import os
 import sys
 
 def get_asset_path(filename):
     if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, 'vocyn', 'assets', filename)
+        return os.path.join(sys._MEIPASS, 'vocynx', 'assets', filename)
     return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", filename)
 
 ARROW_PATH = get_asset_path("ic_drop_down.svg").replace('\\', '/')
@@ -20,7 +20,7 @@ ARROW_PATH = get_asset_path("ic_drop_down.svg").replace('\\', '/')
 class NonScrollingComboBox(QComboBox):
     def wheelEvent(self, event):
         event.ignore()
-from vocyn.audio import get_available_microphones
+from vocynx.audio import get_available_microphones
 
 # ─── Light Theme Colors ──────────────────────────────────────────────────────
 C_BG         = "#F8F9FC"

@@ -12,7 +12,7 @@ class TrayIcon(QSystemTrayIcon):
     
     def __init__(self, icon, parent=None):
         super().__init__(icon, parent)
-        self.setToolTip("Vocyn - Local Dictation")
+        self.setToolTip("Vocynx - Local Dictation")
         
         self.menu = QMenu()
         self.menu.setStyleSheet("""
@@ -63,4 +63,4 @@ class TrayIcon(QSystemTrayIcon):
             self.action_start.setEnabled(False)
             self.action_stop.setEnabled(True)
             
-        self.setToolTip(f"Vocyn - {state}")
+        self.setToolTip(f"Vocynx - {state}")

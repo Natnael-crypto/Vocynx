@@ -4,10 +4,10 @@ import os
 import sys
 import winsound
 
-from vocyn.config import config
-from vocyn.stt import TranscriptionWorker
-from vocyn.hotkeys import GlobalHotkeyManager
-from vocyn.typer import type_text
+from vocynx.config import config
+from vocynx.stt import TranscriptionWorker
+from vocynx.hotkeys import GlobalHotkeyManager
+from vocynx.typer import type_text
 
 class DictationService:
     def __init__(self, status_callback=None, transcription_callback=None, audio_level_callback=None, error_callback=None):
@@ -87,10 +87,10 @@ class DictationService:
         
         # Play the modern start sound
         if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-            sound_path = os.path.join(sys._MEIPASS, "vocyn", "assets", "start_rec.wav")
+            sound_path = os.path.join(sys._MEIPASS, "vocynx", "assets", "start_rec.wav")
         else:
             base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-            sound_path = os.path.join(base_dir, "vocyn", "assets", "start_rec.wav")
+            sound_path = os.path.join(base_dir, "vocynx", "assets", "start_rec.wav")
             
         if os.path.exists(sound_path):
             try:

@@ -2,7 +2,7 @@ package main
 
 import (
 	"embed"
-	"vocyn-installer/backend"
+	"vocynx-installer/backend"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -17,7 +17,7 @@ func main() {
 	installer := backend.NewInstaller()
 
 	err := wails.Run(&options.App{
-		Title:             "Vocyn Setup",
+		Title:             "Vocynx Setup",
 		Width:             780,
 		Height:            520,
 		DisableResize:     true,

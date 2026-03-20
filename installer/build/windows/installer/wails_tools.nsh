@@ -5,13 +5,13 @@
 !include "FileFunc.nsh"
 
 !ifndef INFO_PROJECTNAME
-    !define INFO_PROJECTNAME "vocyn-installer"
+    !define INFO_PROJECTNAME "vocynx-installer"
 !endif
 !ifndef INFO_COMPANYNAME
-    !define INFO_COMPANYNAME "vocyn-installer"
+    !define INFO_COMPANYNAME "vocynx-installer"
 !endif
 !ifndef INFO_PRODUCTNAME
-    !define INFO_PRODUCTNAME "vocyn-installer"
+    !define INFO_PRODUCTNAME "vocynx-installer"
 !endif
 !ifndef INFO_PRODUCTVERSION
     !define INFO_PRODUCTVERSION "1.0.0"

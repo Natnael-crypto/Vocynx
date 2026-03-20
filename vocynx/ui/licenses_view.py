@@ -19,7 +19,7 @@ C_BORDER     = "#E9E4DD"
 
 def get_base_path():
     if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, 'vocyn')
+        return os.path.join(sys._MEIPASS, 'vocynx')
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -204,7 +204,7 @@ class LicensesView(QWidget):
         details_layout.addSpacing(8)
         
         details_layout.addWidget(DetailRow("License Type", "MIT License"))
-        details_layout.addWidget(DetailRow("Repository", "https://github.com/Natnael-crypto/Vocyn"))
+        details_layout.addWidget(DetailRow("Repository", "https://github.com/Natnael-crypto/Vocynx"))
         details_layout.addWidget(DetailRow("First Release", "2026"))
         details_layout.addWidget(DetailRow("Cost", "Free forever"))
         

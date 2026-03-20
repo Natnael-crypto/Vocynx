@@ -3,10 +3,9 @@ from PyInstaller.utils.hooks import collect_data_files
 
 # Collect huggingface / faster-whisper data files if necessary
 datas = collect_data_files("faster_whisper")
-datas += [('../vocyn_icon.ico', '.')]
-datas += [('../vocyn/assets/start_rec.wav', 'vocyn/assets')]
-datas += [('../vocyn/assets/*.svg', 'vocyn/assets')]
-datas += [('../vocyn/licenses/*', 'vocyn/licenses')]
+datas += [('../vocynx_icon.ico', '.')]
+datas += [('../vocynx/assets/*', 'vocynx/assets')]
+datas += [('../vocynx/licenses/*', 'vocynx/licenses')]
 
 a = Analysis(
     ['../main.py'],
@@ -55,8 +54,6 @@ a = Analysis(
         'PySide6.QtRemoteObjects',
         'PySide6.QtDesigner',
         'PySide6.QtPrintSupport',
-        'PySide6.QtSvg',
-        'PySide6.QtSvgWidgets',
         'PySide6.QtUiTools',
         'PySide6.QtXml',
         'PySide6.QtDBus',
@@ -85,7 +82,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='vocyn',
+    name='vocynx',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -98,5 +95,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['../vocyn_icon.ico'],
+    icon=['../vocynx_icon.ico'],
 )

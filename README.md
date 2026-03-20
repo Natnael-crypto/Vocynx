@@ -1,13 +1,13 @@
-# Vocyn
+# Vocynx
 
 <div align="center">
-  <img src="images/home.png" alt="Vocyn Home Interface" width="400">
+  <img src="images/home.png" alt="Vocynx Home Interface" width="400">
   <p><b>Lightweight, fast, privacy-first alternative to WhisperFlow.ai</b></p>
 </div>
 
 <p align="center">
   <a href="#features">Features</a> •
-  <a href="#why-vocyn">Why Vocyn?</a> •
+  <a href="#why-vocynx">Why Vocynx?</a> •
   <a href="#installation">Installation</a> •
   <a href="#how-it-works">How it Works</a> •
   <a href="#development">Development</a>
@@ -15,7 +15,7 @@
 
 ---
 
-**Vocyn** is a next-generation desktop application for real-time, on-device speech-to-text (STT) and multi-language translation. Designed for uncompromising speed and complete user privacy, Vocyn lives quietly in your system tray and empowers you to dictate text *anywhere* with a simple global hotkey.
+**Vocynx** is a next-generation desktop application for real-time, on-device speech-to-text (STT) and multi-language translation. Designed for uncompromising speed and complete user privacy, Vocynx lives quietly in your system tray and empowers you to dictate text *anywhere* with a simple global hotkey.
 
 No cloud subscriptions, no data harvesting just pure, local AI transcription powered by the state-of-the-art Faster-Whisper engine.
 
@@ -42,10 +42,10 @@ No cloud subscriptions, no data harvesting just pure, local AI transcription pow
 
 ---
 
-## Why Vocyn over WhisperFlow.ai?
+## Why Vocynx over WhisperFlow.ai?
 
 Cloud-based solutions like WhisperFlow.ai charge monthly subscriptions and process your private conversations on their servers. 
-Vocyn leverages highly-optimized local AI models, giving you:
+Vocynx leverages highly-optimized local AI models, giving you:
 - **Zero Latency**: No waiting for network requests.
 - **Zero Cost**: Completely free forever.
 - **Zero Tracking**: Maximum privacy and security.
@@ -64,18 +64,18 @@ Vocyn leverages highly-optimized local AI models, giving you:
 
 ## Installation & First-Time Setup
 
-1. **Download & Install**: Grab the latest `VocynInstaller.exe` from the [Releases](#) page and run it.
-2. **Launch**: Open Vocyn from your Desktop or Start Menu. It will dock neatly into your system tray.
+1. **Download & Install**: Grab the latest `VocynxInstaller.exe` from the [Releases](#) page and run it.
+2. **Launch**: Open Vocynx from your Desktop or Start Menu. It will dock neatly into your system tray.
 3. **Choose Your Engine**: On first launch, head to **Settings** and select your preferred Whisper model.
     - **Tiny (Default)**: ~100 MB footprint. Highly recommended for blazingly fast transcription.
     - **Base/Small**: Higher accuracy, requires slightly more memory.
-4. **Auto-Download**: Vocyn will automatically download the selected model locally (only happens once).
+4. **Auto-Download**: Vocynx will automatically download the selected model locally (only happens once).
 
 ---
 
 ## Architecture & Tech Stack
 
-Vocyn uses a hybrid architecture for maximum performance and native system integration:
+Vocynx uses a hybrid architecture for maximum performance and native system integration:
 
 - **Core AI Engine**: Python + [Faster Whisper](https://github.com/SYSTRAN/faster-whisper) (CTranslate2) + [NumPy](https://numpy.org/).
 - **Audio Capture**: Real-time buffer streaming with [SoundDevice](https://python-sounddevice.readthedocs.io/).
@@ -114,7 +114,7 @@ python build_all.py
 
 ## License & Attribution
 
-Vocyn is proudly released under the **MIT License**.
+Vocynx is proudly released under the **MIT License**.
 
 Developed and maintained by [Natnael-crypto](https://github.com/Natnael-crypto).
 Special thanks to the open-source AI community and the creators of Whisper, PySide/Qt, and Faster-Whisper.

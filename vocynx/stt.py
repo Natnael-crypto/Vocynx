@@ -6,8 +6,8 @@ import gc
 # faster_whisper imported inside initialize_model to save memory until needed
 # deep_translator imported inside _transcribe_audio to save memory
 
-from vocyn.config import config
-from vocyn.audio import get_device_index
+from vocynx.config import config
+from vocynx.audio import get_device_index
 
 # Constants
 SAMPLE_RATE = 16000
@@ -214,7 +214,7 @@ class TranscriptionWorker:
             pass
 
     def _refine_with_llm(self, text, provider, api_key, model=None):
-        from vocyn.prompts import REFINEMENT_SYSTEM_PROMPT
+        from vocynx.prompts import REFINEMENT_SYSTEM_PROMPT
         system_prompt = REFINEMENT_SYSTEM_PROMPT
         if provider == "OpenAI":
             if not model: model = "gpt-3.5-turbo"

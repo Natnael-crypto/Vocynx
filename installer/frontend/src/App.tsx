@@ -7,8 +7,8 @@ import CompletionScreen from './components/CompletionScreen';
 import { StartInstallation, LaunchApp, CloseInstaller, GetDefaultPath } from '../wailsjs/go/backend/Installer';
 import { EventsOn } from '../wailsjs/runtime/runtime';
 
-// The vocyn icon lives in the frontend public/ folder (copied at build time)
-import vocynIcon from './assets/vocyn_icon.png';
+// The vocynx icon lives in the frontend public/ folder (copied at build time)
+import vocynxIcon from './assets/vocynx_icon.png';
 
 enum Step { Welcome, License, Location, Progress, Completion }
 
@@ -22,7 +22,7 @@ const STEPS = [
 
 export default function App() {
   const [step, setStep] = useState<Step>(Step.Welcome);
-  const [installPath, setInstallPath] = useState('C:\\Program Files\\Vocyn');
+  const [installPath, setInstallPath] = useState('C:\\Program Files\\Vocynx');
   const [progress, setProgress] = useState(0);
   const [progressTitle, setProgressTitle] = useState('Preparing...');
   const [progressStatus, setProgressStatus] = useState('Initializing...');
@@ -67,9 +67,9 @@ export default function App() {
       }}>
         {/* Logo */}
         <div style={{ padding: '0 24px', marginBottom: 32, display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img src={vocynIcon} alt="Vocyn" style={{ width: 32, height: 32, borderRadius: 6, objectFit: 'contain' }} />
+          <img src={vocynxIcon} alt="Vocynx" style={{ width: 32, height: 32, borderRadius: 6, objectFit: 'contain' }} />
           <div>
-            <div style={{ color: '#ffffff', fontWeight: 700, fontSize: 15, letterSpacing: '-0.02em' }}>Vocyn</div>
+            <div style={{ color: '#ffffff', fontWeight: 700, fontSize: 15, letterSpacing: '-0.02em' }}>Vocynx</div>
             <div style={{ color: '#555555', fontSize: 10, fontWeight: 500, marginTop: 1 }}>Setup Wizard</div>
           </div>
         </div>
@@ -165,7 +165,7 @@ export default function App() {
           padding: '0 28px',
           background: '#fafafa',
         }}>
-          <span style={{ fontSize: 11, color: '#bbbbbb' }}>© 2026 Vocyn</span>
+          <span style={{ fontSize: 11, color: '#bbbbbb' }}>© 2026 Vocynx</span>
           <span style={{ fontSize: 11, color: '#cccccc' }}>Step {Math.min(step + 1, STEPS.length)} / {STEPS.length}</span>
         </div>
       </div>

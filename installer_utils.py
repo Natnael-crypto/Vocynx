@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 def get_app_dir():
     """Get the standard app directory in LocalAppData."""
-    app_dir = Path(os.environ.get('LOCALAPPDATA', os.path.expanduser('~'))) / "Vocyn"
+    app_dir = Path(os.environ.get('LOCALAPPDATA', os.path.expanduser('~'))) / "Vocynx"
     app_dir.mkdir(parents=True, exist_ok=True)
     return app_dir
 
@@ -51,7 +51,7 @@ def register_startup(app_path):
     key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
     try:
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_SET_VALUE)
-        winreg.SetValueEx(key, "Vocyn", 0, winreg.REG_SZ, f'"{app_path}"')
+        winreg.SetValueEx(key, "Vocynx", 0, winreg.REG_SZ, f'"{app_path}"')
         winreg.CloseKey(key)
         return True
     except Exception as e:
@@ -63,7 +63,7 @@ def unregister_startup():
     key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
     try:
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_SET_VALUE)
-        winreg.DeleteValue(key, "Vocyn")
+        winreg.DeleteValue(key, "Vocynx")
         winreg.CloseKey(key)
         return True
     except FileNotFoundError:

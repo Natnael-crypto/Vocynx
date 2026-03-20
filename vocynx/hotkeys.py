@@ -1,6 +1,6 @@
 import keyboard
 
-from vocyn.config import config
+from vocynx.config import config
 
 class GlobalHotkeyManager:
     def __init__(self, toggle_callback):

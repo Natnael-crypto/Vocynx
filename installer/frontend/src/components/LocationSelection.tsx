@@ -22,7 +22,7 @@ const LocationSelection: React.FC<Props> = ({ onNext, onBack, defaultPath }) => 
           Install Location
         </h1>
         <p style={{ color: '#888888', fontSize: 12, marginTop: 5 }}>
-          Choose where Vocyn will be installed on your computer.
+          Choose where Vocynx will be installed on your computer.
         </p>
       </div>
 
@@ -68,7 +68,7 @@ const LocationSelection: React.FC<Props> = ({ onNext, onBack, defaultPath }) => 
             Options
           </div>
           {([
-            { id: 'autostart', label: 'Launch Vocyn automatically on Windows startup', checked: autoStart, set: setAutoStart },
+            { id: 'autostart', label: 'Launch Vocynx automatically on Windows startup', checked: autoStart, set: setAutoStart },
             { id: 'shortcut',  label: 'Create a Desktop shortcut',                     checked: shortcut,   set: setShortcut  },
           ] as const).map(({ id, label, checked, set }) => (
             <div key={id} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>

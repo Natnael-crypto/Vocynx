@@ -1,4 +1,4 @@
-module vocyn-installer
+module vocynx-installer
 
 go 1.23
 

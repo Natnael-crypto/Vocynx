@@ -14,7 +14,7 @@ const CompletionScreen: React.FC<Props> = ({ installPath, onLaunch, onClose }) =
         Installation complete
       </h1>
       <p style={{ color: '#888888', fontSize: 13, marginTop: 6, lineHeight: 1.6 }}>
-        Vocyn has been installed and is ready to use.
+        Vocynx has been installed and is ready to use.
       </p>
     </div>
 
@@ -56,7 +56,7 @@ const CompletionScreen: React.FC<Props> = ({ installPath, onLaunch, onClose }) =
     {/* Actions */}
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 24 }}>
       <button className="btn-ghost" onClick={onClose}>Close</button>
-      <button className="btn-primary" onClick={onLaunch}>Launch Vocyn →</button>
+      <button className="btn-primary" onClick={onLaunch}>Launch Vocynx →</button>
     </div>
   </div>
 );

@@ -17,4 +17,4 @@ def create_loud_beep(filename, freq=440, duration=1.0, sample_rate=44100):
             packed_value = struct.pack('h', int(val))
             wav_file.writeframes(packed_value)
 
-create_loud_beep('d:/Project/Vocyn/vocyn/assets/start_rec.wav')
+create_loud_beep('d:/Project/Vocynx/vocynx/assets/start_rec.wav')
