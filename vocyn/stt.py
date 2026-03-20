@@ -182,13 +182,7 @@ class TranscriptionWorker:
             
             # Refine transcription with LLM if configured
             if llm_provider != "None" and llm_api_key and text:
-                print("Refining transcription with LLM...")
-                print(f"Provider: {llm_provider}")
-                print(f"Model: {llm_model}")
-                print(f"API Key: {llm_api_key}")
-                print(f"Text: {text}")
                 text = self._refine_with_llm(text, llm_provider, llm_api_key, llm_model)
-                print(f"Refined Text: {text}")
 
             # If translation is enabled and target is NOT English, or if Whisper failed to translate to English
             if translate_mode and text:
